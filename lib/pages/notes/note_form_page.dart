@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../models/note.dart';
 import '../../viewmodels/notes_viewmodel.dart';
 import '../../models/user.dart';
@@ -19,6 +20,42 @@ class _NoteFormPageState extends State<NoteFormPage> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   String _selectedAppreciation = 'good';
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _lastWords = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+    _initSpeech();
+  }
+
+  Future<void> _initSpeech() async {
+    bool available = await _speech.initialize();
+    if (!available) {
+      // Handle the case where speech recognition is not available
+    }
+  }
+
+  void _startListening() {
+    _speech.listen(
+      onResult: (result) {
+        setState(() {
+          _isListening = true;
+          _lastWords = result.recognizedWords;
+          _contentController.text = _lastWords;
+        });
+      },
+    );
+  }
+
+  void _stopListening() {
+    _speech.stop();
+    setState(() {
+      _isListening = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +76,32 @@ class _NoteFormPageState extends State<NoteFormPage> {
               hintText: 'Enter note title',
             ),
             SizedBox(height: 16),
-            _buildTextField(
-              controller: _contentController,
-              label: 'Content',
-              hintText: 'Enter note content',
-              maxLines: 5,
+            Stack(
+              children: [
+                _buildTextField(
+                  controller: _contentController,
+                  label: 'Content',
+                  hintText: 'Enter note content',
+                  maxLines: 5,
+                ),
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      _isListening ? Icons.stop : Icons.mic,
+                      color: primaryColor,
+                    ),
+                    onPressed: () {
+                      if (_isListening) {
+                        _stopListening();
+                      } else {
+                        _startListening();
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 16),
             _buildDropdown(
