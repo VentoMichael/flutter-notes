@@ -1,21 +1,28 @@
-// lib/pages/settings/settings_page.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_project/constants.dart'; // Import your color constants
 import 'package:provider/provider.dart';
-import '../../constants.dart';
 import '../../viewmodels/settings_viewmodel.dart';
 import '../../widgets/custom_navigation_bar.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final settingViewModel = Provider.of<SettingViewModel>(context);
+    final settingsViewModel = Provider.of<SettingsViewModel>(context);
+
+    final isDarkMode = settingsViewModel.setting.isDarkModeEnabled;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Paramètres'),
-        backgroundColor: primaryColor,
+        title: Text(
+          'Paramètres',
+          style: TextStyle(
+            color: Colors.white, // Set color for the title text
+            fontSize: 20,
+          ),
+        ),
+        backgroundColor: primaryColor, // Set color for AppBar
         iconTheme: IconThemeData(
-          color: Colors.white,
+          color: Colors.white, // Set color for AppBar icons
         ),
         actions: [
           Padding(
@@ -38,15 +45,24 @@ class SettingsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+                color: isDarkMode ? Colors.white : Colors.black, // Set color based on theme
               ),
             ),
             SizedBox(height: 16),
             SwitchListTile(
-              title: Text('Dark Mode'),
-              value: settingViewModel.setting.isDarkModeEnabled,
+              title: Text(
+                'Dark Mode',
+                style: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black, // Set color based on theme
+                ),
+              ),
+              value: settingsViewModel.setting.isDarkModeEnabled,
               onChanged: (value) {
-                settingViewModel.toggleDarkMode(value);
+                settingsViewModel.toggleDarkMode(value);
               },
+              activeColor: primaryColor, // Set the color of the switch when it is active
+              inactiveTrackColor: isDarkMode ? Colors.grey : Colors.black12, // Set the color of the track when inactive
+              inactiveThumbColor: isDarkMode ? Colors.white : Colors.black, // Set the color of the thumb when inactive
             ),
           ],
         ),

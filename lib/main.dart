@@ -1,52 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/viewmodels/settings_viewmodel.dart';
+import 'package:flutter_project/pages/users/user_detail_page.dart';
 import 'package:provider/provider.dart';
-import 'models/settings.dart';  // Make sure this path is correct
-import 'models/user.dart';
-import 'pages/home/home_page.dart';
+import 'viewmodels/settings_viewmodel.dart';
 import 'pages/settings/settings_page.dart';
-import 'pages/users/user_detail_page.dart';
-import 'viewmodels/notes_viewmodel.dart';
+import 'pages/home/home_page.dart';
 import 'viewmodels/users_viewmodel.dart';
-import 'viewmodels/settings_viewmodel.dart'; // Correct import for the Settings ViewModel
+import 'viewmodels/notes_viewmodel.dart';
+import 'models/settings.dart';
+import 'models/user.dart';
 
 void main() {
   final setting = Setting(isDarkModeEnabled: false);
-
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UsersViewModel()),
         ChangeNotifierProvider(create: (_) => NotesViewModel()),
-        ChangeNotifierProvider(create: (_) => SettingViewModel(setting)),
+        ChangeNotifierProvider(create: (_) => SettingsViewModel(setting)),
       ],
       child: MyApp(),
     ),
   );
 }
 
+// Define your light theme
+final ThemeData lightTheme = ThemeData(
+  primaryColor: Colors.blue,
+  scaffoldBackgroundColor: Colors.white,
+  appBarTheme: AppBarTheme(
+    color: Colors.blue,
+    iconTheme: IconThemeData(color: Colors.white),
+    titleTextStyle: TextStyle(color: Colors.white, fontSize: 20), // AppBar title
+  ),
+  // Define other colors and properties as needed
+);
+
+// Define your dark theme
+final ThemeData darkTheme = ThemeData(
+  primaryColor: Colors.blueGrey,
+  scaffoldBackgroundColor: Colors.black,
+  appBarTheme: AppBarTheme(
+    color: Colors.blueGrey,
+    iconTheme: IconThemeData(color: Colors.white),
+    titleTextStyle: TextStyle(color: Colors.white, fontSize: 20), // AppBar title
+  ),
+  // Define other colors and properties as needed
+);
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<SettingViewModel>(
-      builder: (context, settingViewModel, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            brightness: settingViewModel.setting.isDarkModeEnabled
-                ? Brightness.dark
-                : Brightness.light,
-          ),
-          initialRoute: '/home',
-          routes: {
-            '/home': (context) => HomePage(),
-            '/userDetail': (context) {
-              final User user = ModalRoute.of(context)!.settings.arguments as User;
-              return UserDetailPage(user: user);
-            },
-            '/settings': (context) => SettingsPage(),
-          },
-        );
+    final settingsViewModel = Provider.of<SettingsViewModel>(context);
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: settingsViewModel.setting.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      home: HomePage(),
+      initialRoute: '/home',
+      routes: {
+        '/userDetail': (context) {
+          final User user = ModalRoute.of(context)!.settings.arguments as User;
+          return UserDetailPage(user: user);
+        },
+        '/home': (context) => HomePage(),
+        '/settings': (context) => SettingsPage(),
       },
     );
   }

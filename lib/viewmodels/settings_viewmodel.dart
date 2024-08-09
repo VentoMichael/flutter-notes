@@ -1,11 +1,12 @@
 // lib/viewmodels/setting_viewmodel.dart
 import 'package:flutter/material.dart';
 import '../models/settings.dart';
+import '../viewmodels/settings_viewmodel.dart';
 
-class SettingViewModel extends ChangeNotifier {
+class SettingsViewModel extends ChangeNotifier {
   Setting _setting;
 
-  SettingViewModel(this._setting);
+  SettingsViewModel(this._setting);
 
   Setting get setting => _setting;
 

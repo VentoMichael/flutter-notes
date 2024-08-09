@@ -46,11 +46,16 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
-          'assets/images/logo.png',
-          width: 150,
-          fit: BoxFit.contain,
-        ),
+          title: Image.asset(
+            'assets/images/logo.png',
+            width: 200,
+            fit: BoxFit.cover,
+          ),
+          backgroundColor: primaryColor,
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+
         actions: [
           IconButton(
             iconSize: 35,
@@ -64,7 +69,6 @@ class HomePage extends StatelessWidget {
           ),
         ],
         elevation: 0,
-        backgroundColor: Colors.transparent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

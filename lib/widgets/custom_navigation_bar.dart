@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import '../constants.dart'; // Import the constants file
+import 'package:provider/provider.dart';
+import '../../viewmodels/settings_viewmodel.dart';
+import '../constants.dart';
 
 class CustomNavigationBar extends StatelessWidget {
   const CustomNavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final settingsViewModel = Provider.of<SettingsViewModel>(context);
+    final isDarkMode = settingsViewModel.setting.isDarkModeEnabled;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white, // Always white background
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: isDarkMode ? Colors.black.withOpacity(0.3) : Colors.grey.withOpacity(0.3), // Shadow color based on dark mode
             blurRadius: 10,
             spreadRadius: 2,
             offset: Offset(0, -2),
@@ -26,8 +31,8 @@ class CustomNavigationBar extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: primaryColor, // Use the color constant
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: primaryColor,
+        unselectedItemColor: Colors.black,
         showSelectedLabels: true,
         showUnselectedLabels: true,
         selectedLabelStyle: TextStyle(
