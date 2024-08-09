@@ -7,6 +7,7 @@ import '../../widgets/user_card.dart';
 import '../../utils/custom_search_delegate.dart';
 import '../../models/user.dart';
 import '../../models/note.dart';
+import '../../constants.dart'; // Import the constants file
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -75,7 +76,7 @@ class HomePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: textColor, // Use the color constant
               ),
             ),
             const SizedBox(height: 8),
@@ -101,7 +102,7 @@ class HomePage extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                            color: textColor, // Use the color constant
                           ),
                         ),
                         const SizedBox(height: 8),

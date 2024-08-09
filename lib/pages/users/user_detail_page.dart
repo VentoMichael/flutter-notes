@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/user.dart';
 import '../../viewmodels/user_detail_viewmodel.dart';
+import '../../widgets/custom_navigation_bar.dart';
 import '../../widgets/note_list.dart';
 import '../../widgets/user_header.dart';
 import '../../models/note.dart';
 import '../../viewmodels/notes_viewmodel.dart';
+import '../notes/note_form_page.dart';
+import '../../constants.dart';
 
 class UserDetailPage extends StatefulWidget {
   final User user;
@@ -36,7 +38,10 @@ class _UserDetailPageState extends State<UserDetailPage> with SingleTickerProvid
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.user.name),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: primaryColor,
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -56,8 +61,11 @@ class _UserDetailPageState extends State<UserDetailPage> with SingleTickerProvid
       value: _viewModel!,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.user.name),
-          backgroundColor: Colors.blueGrey,
+          title: Text(widget.user.name, style: TextStyle(color: Colors.white)),
+          backgroundColor: primaryColor,
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -83,12 +91,17 @@ class _UserDetailPageState extends State<UserDetailPage> with SingleTickerProvid
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
+                      color: textColor,
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
                 TabBar(
                   controller: viewModel.tabController,
+                  labelColor: primaryColor,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorColor: primaryColor,
+                  indicatorWeight: 3.0,
                   tabs: const [
                     Tab(text: 'All'),
                     Tab(text: 'Good'),
@@ -111,6 +124,17 @@ class _UserDetailPageState extends State<UserDetailPage> with SingleTickerProvid
             );
           },
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NoteFormPage(user: widget.user)),
+            );
+          },
+          child: Icon(Icons.add),
+          backgroundColor: primaryColor,
+        ),
+        bottomNavigationBar: const CustomNavigationBar(),
       ),
     );
   }

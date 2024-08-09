@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants.dart'; // Import the constants file
 
 class CustomNavigationBar extends StatelessWidget {
   const CustomNavigationBar({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class CustomNavigationBar extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blueAccent,
+        selectedItemColor: primaryColor, // Use the color constant
         unselectedItemColor: Colors.grey,
         showSelectedLabels: true,
         showUnselectedLabels: true,
@@ -45,7 +46,35 @@ class CustomNavigationBar extends StatelessWidget {
             label: 'Settings',
           ),
         ],
+        currentIndex: _getSelectedIndex(context), // Track the current index
+        onTap: (index) => _onItemTapped(context, index), // Handle item tap
       ),
     );
+  }
+
+  // Get the current selected index based on the current route
+  int _getSelectedIndex(BuildContext context) {
+    final currentRoute = ModalRoute.of(context)?.settings.name;
+
+    switch (currentRoute) {
+      case '/home':
+        return 0;
+      case '/settings':
+        return 1;
+      default:
+        return 0; // Default to the first tab if unknown
+    }
+  }
+
+  // Handle the navigation logic
+  void _onItemTapped(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/settings');
+        break;
+    }
   }
 }

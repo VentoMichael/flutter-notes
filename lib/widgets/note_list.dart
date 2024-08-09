@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import '../models/note.dart';
+import '../constants.dart'; // Import the constants file
 
 class NoteList extends StatelessWidget {
   final List<Note> notes;
-  final String appreciationFilter; // New parameter for the filter
+  final String appreciationFilter;
 
   const NoteList({
     required this.notes,
-    required this.appreciationFilter, // Include filter in constructor
+    required this.appreciationFilter,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (notes.isEmpty) {
-      // Determine message based on the filter
       String message;
       IconData appreciationIcon;
 
@@ -24,7 +24,7 @@ class NoteList extends StatelessWidget {
           appreciationIcon = Icons.thumb_up;
           break;
         case 'nul':
-          message = 'No neutral notes'; // Neutral message
+          message = 'No neutral notes';
           appreciationIcon = Icons.sentiment_neutral;
           break;
         case 'bad':
@@ -68,6 +68,7 @@ class NoteList extends StatelessWidget {
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           elevation: 4.0,
+          color: cardColor, // Use color constant
           child: ListTile(
             contentPadding: const EdgeInsets.all(16.0),
             title: Text(
@@ -75,6 +76,7 @@ class NoteList extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,
+                color: textColor, // Use color constant
               ),
             ),
             subtitle: Column(
@@ -99,7 +101,6 @@ class NoteList extends StatelessWidget {
     );
   }
 
-  // Helper function to get icon based on appreciation type
   IconData _getIconForAppreciation(String appreciation) {
     switch (appreciation) {
       case 'good':
@@ -113,39 +114,42 @@ class NoteList extends StatelessWidget {
     }
   }
 
-  // Helper function to truncate text to a specified length
   String _truncateText(String text, int length) {
     return text.length > length ? text.substring(0, length) + '...' : text;
   }
 
-  // Helper function to format date
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
   }
 
-  // Helper function to return color based on appreciation type
   Color _getIconColor(String appreciation) {
     switch (appreciation) {
       case 'good':
-        return Colors.green;
+        return iconGoodColor; // Use color constant
       case 'nul':
-        return Colors.orange;
+        return iconNulColor; // Use color constant
       case 'bad':
-        return Colors.red;
+        return iconBadColor; // Use color constant
       default:
         return Colors.grey;
     }
   }
 
-  // Function to show a dialog with the full text
   void _showFullTextDialog(BuildContext context, String title, String fullText, DateTime date, String appreciation) {
     IconData appreciationIcon = _getIconForAppreciation(appreciation);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        // Get the full width of the screen
+        var screenWidth = MediaQuery.of(context).size.width;
+
         return AlertDialog(
           contentPadding: EdgeInsets.all(24.0),
+          // Remove the default shape to allow full width
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -161,16 +165,18 @@ class NoteList extends StatelessWidget {
               Icon(appreciationIcon, color: _getIconColor(appreciation)),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                fullText,
-                style: TextStyle(fontSize: 16.0),
-              ),
-              SizedBox(height: 16.0),
-            ],
+          content: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  fullText,
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                SizedBox(height: 16.0),
+              ],
+            ),
           ),
           actions: <Widget>[
             Row(
@@ -193,4 +199,5 @@ class NoteList extends StatelessWidget {
       },
     );
   }
+
 }

@@ -1,7 +1,6 @@
-// lib/widgets/note_card.dart
-
 import 'package:flutter/material.dart';
 import '../models/note.dart';
+import '../constants.dart'; // Import the constants file
 
 class NoteCard extends StatelessWidget {
   final Note note;
@@ -16,6 +15,7 @@ class NoteCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Card(
+          color: cardColor, // Use the color constant
           elevation: 6.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
@@ -33,6 +33,7 @@ class NoteCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        color: textColor, // Use the color constant
                       ),
                     ),
                     _getAppreciationIcon(note.appreciation),
@@ -74,15 +75,15 @@ class NoteCard extends StatelessWidget {
     switch (appreciation) {
       case 'good':
         iconData = Icons.thumb_up;
-        color = Colors.green;
+        color = iconGoodColor; // Use the color constant
         break;
       case 'bad':
         iconData = Icons.thumb_down;
-        color = Colors.red;
+        color = iconBadColor; // Use the color constant
         break;
       case 'nul':
         iconData = Icons.cancel;
-        color = Colors.grey;
+        color = iconNulColor; // Use the color constant
         break;
       default:
         iconData = Icons.help;

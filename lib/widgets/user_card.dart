@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/user.dart';
 import '../pages/users/user_detail_page.dart';
+import '../../constants.dart'; // Import the constants file
 
 class UserCard extends StatelessWidget {
   final User user;
@@ -15,6 +16,7 @@ class UserCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
       ),
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+      color: userCardBackgroundColor, // Use color constant
       child: ListTile(
         contentPadding: const EdgeInsets.all(16.0),
         leading: CircleAvatar(
@@ -34,7 +36,7 @@ class UserCard extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: Colors.black87,
+            color: userCardTextColor, // Use color constant
           ),
         ),
         subtitle: Column(

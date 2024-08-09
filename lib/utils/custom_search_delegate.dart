@@ -89,7 +89,7 @@ class CustomSearchDelegate extends SearchDelegate {
           final note = noteResults[itemIndex];
           return ListTile(
             title: Text(note.title),
-            subtitle: Text(note.content),
+            subtitle: Text(_truncateText(note.content, 60)), // Truncate content
             onTap: () {
               Navigator.pushNamed(context, '/noteDetail', arguments: note);
             },
@@ -149,7 +149,7 @@ class CustomSearchDelegate extends SearchDelegate {
           ...noteSuggestions.map((note) {
             return ListTile(
               title: Text(note.title),
-              subtitle: Text(note.content),
+              subtitle: Text(_truncateText(note.content, 60)), // Truncate content
               onTap: () {
                 query = note.title;
                 Navigator.pushNamed(context, '/noteDetail', arguments: note);
@@ -159,5 +159,10 @@ class CustomSearchDelegate extends SearchDelegate {
         ],
       ],
     );
+  }
+
+  // Helper method to truncate text
+  String _truncateText(String text, int length) {
+    return text.length > length ? text.substring(0, length) + '...' : text;
   }
 }
