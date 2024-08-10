@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
-import '../constants.dart'; // Import the constants file
+import '../constants.dart';
 
 class UserHeader extends StatelessWidget {
   final User user;
@@ -11,9 +11,9 @@ class UserHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16.0, 32.0, 16.0, 24.0), // Added more space at the top
+      padding: const EdgeInsets.fromLTRB(16.0, 32.0, 16.0, 24.0),
       decoration: BoxDecoration(
-        color: userHeaderBackgroundColor, // Use a color or gradient
+        color: userHeaderBackgroundColor,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(24.0),
           bottomRight: Radius.circular(24.0),
@@ -50,7 +50,7 @@ class UserHeader extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
-                    color: userHeaderTextColor, // Use color constant
+                    color: userHeaderTextColor,
                   ),
                 ),
                 const SizedBox(height: 4),

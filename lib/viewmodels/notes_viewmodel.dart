@@ -24,7 +24,6 @@ class NotesViewModel extends ChangeNotifier {
       date: DateTime.now().subtract(Duration(days: 3)),
       appreciation: 'bad',
     ),
-    // Add more notes if needed
   ];
 
 

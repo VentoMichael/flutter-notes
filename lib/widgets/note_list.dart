@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/note.dart';
-import '../constants.dart'; // Import the constants file
+import '../constants.dart';
 
 class NoteList extends StatelessWidget {
   final List<Note> notes;
@@ -68,7 +68,7 @@ class NoteList extends StatelessWidget {
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           elevation: 4.0,
-          color: cardColor, // Use color constant
+          color: cardColor,
           child: ListTile(
             contentPadding: const EdgeInsets.all(16.0),
             title: Text(
@@ -76,7 +76,7 @@ class NoteList extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,
-                color: textColor, // Use color constant
+                color: textColor,
               ),
             ),
             subtitle: Column(
@@ -125,11 +125,11 @@ class NoteList extends StatelessWidget {
   Color _getIconColor(String appreciation) {
     switch (appreciation) {
       case 'good':
-        return iconGoodColor; // Use color constant
+        return iconGoodColor;
       case 'nul':
-        return iconNulColor; // Use color constant
+        return iconNulColor;
       case 'bad':
-        return iconBadColor; // Use color constant
+        return iconBadColor;
       default:
         return Colors.grey;
     }
@@ -141,12 +141,10 @@ class NoteList extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // Get the full width of the screen
         var screenWidth = MediaQuery.of(context).size.width;
 
         return AlertDialog(
           contentPadding: EdgeInsets.all(24.0),
-          // Remove the default shape to allow full width
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),

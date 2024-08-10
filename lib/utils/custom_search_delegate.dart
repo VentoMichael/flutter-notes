@@ -42,14 +42,22 @@ class CustomSearchDelegate extends SearchDelegate {
           note.content.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
+    if (userResults.isEmpty && noteResults.isEmpty) {
+      return Center(
+        child: Text(
+          'Aucun résultat trouvé',
+          style: TextStyle(fontSize: 18, color: Colors.grey),
+        ),
+      );
+    }
+
     return ListView.separated(
       separatorBuilder: (context, index) {
-        // Adding space between different sections
         if (index == 0 && userResults.isNotEmpty) return SizedBox(height: 16.0);
         if (index == userResults.length && noteResults.isNotEmpty) return SizedBox(height: 16.0);
         return Divider();
       },
-      itemCount: userResults.length + noteResults.length + 2, // Extra items for headers and spacers
+      itemCount: userResults.length + noteResults.length + 2,
       itemBuilder: (context, index) {
         if (index == 0 && userResults.isNotEmpty) {
           return Padding(
@@ -89,7 +97,7 @@ class CustomSearchDelegate extends SearchDelegate {
           final note = noteResults[itemIndex];
           return ListTile(
             title: Text(note.title),
-            subtitle: Text(_truncateText(note.content, 60)), // Truncate content
+            subtitle: Text(_truncateText(note.content, 60)),
             onTap: () {
               Navigator.pushNamed(context, '/noteDetail', arguments: note);
             },
@@ -111,13 +119,22 @@ class CustomSearchDelegate extends SearchDelegate {
           note.content.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
+    if (userSuggestions.isEmpty && noteSuggestions.isEmpty) {
+      return Center(
+        child: Text(
+          'Aucune suggestion disponible',
+          style: TextStyle(fontSize: 18, color: Colors.grey),
+        ),
+      );
+    }
+
     return ListView(
       children: [
         if (userSuggestions.isNotEmpty) ...[
           Padding(
-            padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0), // Only top margin
+            padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
             child: Text(
-              'Users',
+              'Employés',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -137,7 +154,7 @@ class CustomSearchDelegate extends SearchDelegate {
         ],
         if (noteSuggestions.isNotEmpty) ...[
           Padding(
-            padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0), // Only top margin
+            padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
             child: Text(
               'Notes',
               style: TextStyle(
@@ -149,7 +166,7 @@ class CustomSearchDelegate extends SearchDelegate {
           ...noteSuggestions.map((note) {
             return ListTile(
               title: Text(note.title),
-              subtitle: Text(_truncateText(note.content, 60)), // Truncate content
+              subtitle: Text(_truncateText(note.content, 60)),
               onTap: () {
                 query = note.title;
                 Navigator.pushNamed(context, '/noteDetail', arguments: note);
@@ -161,7 +178,6 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-  // Helper method to truncate text
   String _truncateText(String text, int length) {
     return text.length > length ? text.substring(0, length) + '...' : text;
   }

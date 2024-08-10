@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/note.dart';
 import '../../viewmodels/notes_viewmodel.dart';
-import '../../constants.dart'; // Import the constants file
+import '../../constants.dart';
 
 class CreateNotePage extends StatefulWidget {
   const CreateNotePage({super.key});
@@ -22,7 +22,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Note'),
-        backgroundColor: primaryColor, // Use the color constant
+        backgroundColor: primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -74,7 +74,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor, // Use the color constant
+                backgroundColor: primaryColor,
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),

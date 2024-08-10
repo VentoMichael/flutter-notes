@@ -7,7 +7,7 @@ import '../../widgets/user_card.dart';
 import '../../utils/custom_search_delegate.dart';
 import '../../models/user.dart';
 import '../../models/note.dart';
-import '../../constants.dart'; // Import the constants file
+import '../../constants.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -17,7 +17,6 @@ class HomePage extends StatelessWidget {
     final usersViewModel = Provider.of<UsersViewModel>(context);
     final notesViewModel = Provider.of<NotesViewModel>(context);
 
-    // Use empty lists if users or notes are null
     final users = usersViewModel.users ?? [];
     final notes = notesViewModel.notes ?? [];
 
@@ -45,6 +44,7 @@ class HomePage extends StatelessWidget {
     }
 
     return Scaffold(
+
       appBar: AppBar(
           title: Image.asset(
             'assets/images/logo.png',
@@ -69,7 +69,9 @@ class HomePage extends StatelessWidget {
           ),
         ],
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -80,7 +82,7 @@ class HomePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
-                color: textColor, // Use the color constant
+                color: textColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -106,7 +108,7 @@ class HomePage extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
-                            color: textColor, // Use the color constant
+                            color: textColor,
                           ),
                         ),
                         const SizedBox(height: 8),

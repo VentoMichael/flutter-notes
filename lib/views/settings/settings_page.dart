@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/constants.dart'; // Import your color constants
 import 'package:provider/provider.dart';
 import '../../viewmodels/settings_viewmodel.dart';
+import '../../viewmodels/auth_viewmodel.dart';
 import '../../widgets/custom_navigation_bar.dart';
+import '../../constants.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsViewModel = Provider.of<SettingsViewModel>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     final isDarkMode = settingsViewModel.setting.isDarkModeEnabled;
 
@@ -16,13 +18,13 @@ class SettingsPage extends StatelessWidget {
         title: Text(
           'Paramètres',
           style: TextStyle(
-            color: Colors.white, // Set color for the title text
+            color: Colors.white,
             fontSize: 20,
           ),
         ),
-        backgroundColor: primaryColor, // Set color for AppBar
+        backgroundColor: primaryColor,
         iconTheme: IconThemeData(
-          color: Colors.white, // Set color for AppBar icons
+          color: Colors.white,
         ),
         actions: [
           Padding(
@@ -45,7 +47,7 @@ class SettingsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: isDarkMode ? Colors.white : Colors.black, // Set color based on theme
+                color: isDarkMode ? Colors.white : Colors.black,
               ),
             ),
             SizedBox(height: 16),
@@ -53,16 +55,28 @@ class SettingsPage extends StatelessWidget {
               title: Text(
                 'Dark Mode',
                 style: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.black, // Set color based on theme
+                  color: isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
               value: settingsViewModel.setting.isDarkModeEnabled,
               onChanged: (value) {
                 settingsViewModel.toggleDarkMode(value);
               },
-              activeColor: primaryColor, // Set the color of the switch when it is active
-              inactiveTrackColor: isDarkMode ? Colors.grey : Colors.black12, // Set the color of the track when inactive
-              inactiveThumbColor: isDarkMode ? Colors.white : Colors.black, // Set the color of the thumb when inactive
+              activeColor: primaryColor,
+              inactiveTrackColor: isDarkMode ? Colors.grey : Colors.black12,
+              inactiveThumbColor: isDarkMode ? Colors.white : Colors.black,
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                authViewModel.logout();
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: Text('Logout', style: TextStyle(fontSize: 18)),
             ),
           ],
         ),

@@ -5,7 +5,7 @@ import '../../models/note.dart';
 import '../../viewmodels/notes_viewmodel.dart';
 import '../../models/user.dart';
 import '../../constants.dart';
-import '../../widgets/custom_navigation_bar.dart'; // Import the constants file
+import '../../widgets/custom_navigation_bar.dart';
 
 class NoteFormPage extends StatefulWidget {
   final User user;
@@ -34,7 +34,6 @@ class _NoteFormPageState extends State<NoteFormPage> {
   Future<void> _initSpeech() async {
     bool available = await _speech.initialize();
     if (!available) {
-      // Handle the case where speech recognition is not available
     }
   }
 
@@ -62,7 +61,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Note for ${widget.user.name}'),
-        backgroundColor: primaryColor, // Use the color constant
+        backgroundColor: primaryColor,
         elevation: 0,
         centerTitle: true,
       ),
@@ -118,7 +117,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
             ElevatedButton(
               onPressed: _addNote,
               style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor, // Use the color constant
+                backgroundColor: primaryColor,
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -127,7 +126,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white, // Use the color constant
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -193,7 +192,6 @@ class _NoteFormPageState extends State<NoteFormPage> {
     final appreciation = _selectedAppreciation;
 
     if (title.isEmpty || content.isEmpty) {
-      // Handle empty fields
       return;
     }
 
@@ -202,7 +200,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
       content: content,
       appreciation: appreciation,
       date: DateTime.now(),
-      userId: widget.user.userId, // Ensure this property exists
+      userId: widget.user.userId,
     );
 
     final notesViewModel = Provider.of<NotesViewModel>(context, listen: false);

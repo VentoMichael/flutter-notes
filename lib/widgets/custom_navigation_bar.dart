@@ -13,10 +13,10 @@ class CustomNavigationBar extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white, // Always white background
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: isDarkMode ? Colors.black.withOpacity(0.3) : Colors.grey.withOpacity(0.3), // Shadow color based on dark mode
+            color: isDarkMode ? Colors.black.withOpacity(0.3) : Colors.grey.withOpacity(0.3),
             blurRadius: 10,
             spreadRadius: 2,
             offset: Offset(0, -2),
@@ -51,13 +51,12 @@ class CustomNavigationBar extends StatelessWidget {
             label: 'Settings',
           ),
         ],
-        currentIndex: _getSelectedIndex(context), // Track the current index
-        onTap: (index) => _onItemTapped(context, index), // Handle item tap
+        currentIndex: _getSelectedIndex(context),
+        onTap: (index) => _onItemTapped(context, index),
       ),
     );
   }
 
-  // Get the current selected index based on the current route
   int _getSelectedIndex(BuildContext context) {
     final currentRoute = ModalRoute.of(context)?.settings.name;
 
@@ -67,11 +66,10 @@ class CustomNavigationBar extends StatelessWidget {
       case '/settings':
         return 1;
       default:
-        return 0; // Default to the first tab if unknown
+        return 0;
     }
   }
 
-  // Handle the navigation logic
   void _onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
