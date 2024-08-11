@@ -55,27 +55,6 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () async {
-                    await authViewModel.register(
-                      _nameController.text,
-                      _emailController.text,
-                      _passwordController.text,
-                    );
-
-                    if (authViewModel.user != null) {
-                      Navigator.pushReplacementNamed(context, '/home');
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Registration failed')),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: Text('Register', style: TextStyle(fontSize: 18)),
-                ),
                 TextButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/login');

@@ -1,36 +1,70 @@
-// lib/services/auth_service.dart
+import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 import '../models/user.dart';
 
 class AuthService {
-  Future<User> login(String email, String password) async {
-    await Future.delayed(Duration(seconds: 2));
 
-    if (email == "test@example.com" && password == "password") {
+  final Dio _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:8000/api'));
+  final Logger _logger = Logger();
+
+  AuthService() {
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        _logger.i('Request: ${options.method} ${options.uri}');
+        _logger.i('Headers: ${options.headers}');
+        _logger.i('Request Data: ${options.data}');
+        return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        _logger.i('Response: ${response.statusCode} ${response.requestOptions.uri}');
+        _logger.i('Response Data: ${response.data}');
+        return handler.next(response);
+      },
+      onError: (DioError e, handler) {
+        _logger.e('Error: ${e.response?.statusCode}');
+        _logger.e('Error Request URI: ${e.requestOptions.uri}');
+        _logger.e('Error Request Data: ${e.requestOptions.data}');
+        _logger.e('Error Response Data: ${e.response?.data}');
+        _logger.e('Error Message: ${e.message}');
+        return handler.next(e);
+      },
+    ));
+  }
+
+  Future<User> login(String email, String password) async {
+    try {
+      final response = await _dio.post('/login', data: {
+        'email': email,
+        'password': password,
+      });
+
+      final data = response.data;
+
       return User(
-        userId: "1",
-        name: "John Doe",
-        email: email,
-        position: 'Software Engineer',
-        mainPosition: 'Engineer',
-        news: 'Employee of the Month',
-        role: 'User', password: '',
+        userId: data['user']['id']?.toString() ?? '',
+        name: data['user']['name'] ?? 'Unknown',
+        email: data['user']['email'] ?? 'Unknown',
+        position: data['user']['position'] ?? 'Unknown',
+        mainPosition: data['user']['mainPosition'] ?? 'Unknown',
+        news: data['user']['news'] ?? '',
+        role: data['user']['role'] ?? 'User',
+        password: password,
       );
-    } else {
-      throw Exception("Invalid credentials");
+    } catch (e) {
+      if (e is DioError) {
+        if (e.response?.statusCode == 401) {
+          throw Exception('Invalid credentials. Please check your email and password.');
+        } else if (e.response?.statusCode == 500) {
+          throw Exception('Server error. Please try again later.');
+        } else {
+          throw Exception('Failed to connect to the server. Please try again later.');
+        }
+      } else {
+        throw Exception('An unexpected error occurred. Please try again later.');
+      }
     }
   }
 
-  Future<User> register(String name, String email, String password) async {
-    await Future.delayed(Duration(seconds: 2));
 
-    return User(
-      userId: "1",
-      name: name,
-      email: email,
-      position: 'Software Engineer',
-      mainPosition: 'Engineer',
-      news: 'New Employee',
-      role: 'User', password: '',
-    );
-  }
+
 }
