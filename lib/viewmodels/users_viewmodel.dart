@@ -1,53 +1,47 @@
-// lib/viewmodels/users_viewmodel.dart
 import 'package:flutter/material.dart';
 import '../models/user.dart';
+import '../services/api_service.dart';
 
 class UsersViewModel extends ChangeNotifier {
-  final List<User> _users = [
-    User(
-      userId: '1',
-      name: 'Alice Johnson',
-      email: 'alice@example.com',
-      password: 'password',
-      position: 'Manager',
-      mainPosition: 'Manager',
-      news: 'Alice has been promoted to Senior Manager.',
-      role: 'Manager',
-    ),
-    User(
-      userId: '2',
-      name: 'Bob Smith',
-      email: 'bob@example.com',
-      password: 'password',
-      position: 'Back-end',
-      mainPosition: 'Developer',
-      news: 'Bob is working on the new company app.',
-      role: 'Developer',
-    ),
-    User(
-      userId: '3',
-      name: 'Charlie Davis',
-      email: 'charlie@example.com',
-      password: 'password',
-      position: 'Front-end',
-      mainPosition: 'Developer',
-      news: 'Charlie has created new designs for the website.',
-      role: 'Designer',
-    ),
-  ];
+  List<User>? _users;
+  bool _isLoading = false;
+  String? _errorMessage;
+  User? _currentUser; // Track the current user by ID
 
-  List<User> get users => _users;
+  List<User>? get users => _users;
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
+  User? get currentUser => _currentUser;
 
-  User? findUserByEmail(String email) {
+  Future<void> fetchUsers() async {
+    _isLoading = true;
+    notifyListeners();
+
     try {
-      return _users.firstWhere((user) => user.email == email);
+      _users = await ApiService.getUsers();
+      _errorMessage = null;
     } catch (e) {
-      return null;
+      _errorMessage = 'Failed to load users: $e';
+      _users = [];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
-  void addUser(User user) {
-    _users.add(user);
+  Future<void> fetchUserById(int id) async {
+    _isLoading = true;
     notifyListeners();
+
+    try {
+      _currentUser = await ApiService.getUserById(id); // Fetch user by ID
+      _errorMessage = null;
+    } catch (e) {
+      _errorMessage = 'Failed to load user: $e';
+      _currentUser = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

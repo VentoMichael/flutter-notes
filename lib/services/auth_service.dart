@@ -3,7 +3,6 @@ import 'package:logger/logger.dart';
 import '../models/user.dart';
 
 class AuthService {
-
   final Dio _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:8000/api'));
   final Logger _logger = Logger();
 
@@ -40,6 +39,12 @@ class AuthService {
 
       final data = response.data;
 
+      // Ensure the 'user' field exists in the response data
+      if (data['user'] == null) {
+        throw Exception('Unexpected response format.');
+      }
+
+      // Construct and return a User object from response data
       return User(
         userId: data['user']['id']?.toString() ?? '',
         name: data['user']['name'] ?? 'Unknown',
@@ -52,19 +57,17 @@ class AuthService {
       );
     } catch (e) {
       if (e is DioError) {
-        if (e.response?.statusCode == 401) {
-          throw Exception('Invalid credentials. Please check your email and password.');
-        } else if (e.response?.statusCode == 500) {
-          throw Exception('Server error. Please try again later.');
-        } else {
-          throw Exception('Failed to connect to the server. Please try again later.');
+        switch (e.response?.statusCode) {
+          case 401:
+            throw Exception('Invalid credentials. Please check your email and password.');
+          case 500:
+            throw Exception('Server error. Please try again later.');
+          default:
+            throw Exception('Failed to connect to the server. Please try again later.');
         }
       } else {
         throw Exception('An unexpected error occurred. Please try again later.');
       }
     }
   }
-
-
-
 }

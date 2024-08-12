@@ -9,18 +9,35 @@ import '../../models/user.dart';
 import '../../models/note.dart';
 import '../../constants.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    final usersViewModel = Provider.of<UsersViewModel>(context, listen: false);
+    usersViewModel.fetchUsers(); // Fetch all users if needed
+
+    // Fetch user by ID
+    // The ID should ideally be passed or determined based on context
+    Future.delayed(Duration.zero, () async {
+      await usersViewModel.fetchUserById(1); // Fetch user with ID 1
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final usersViewModel = Provider.of<UsersViewModel>(context);
     final notesViewModel = Provider.of<NotesViewModel>(context);
-
     final users = usersViewModel.users ?? [];
     final notes = notesViewModel.notes ?? [];
+    final currentUser = usersViewModel.currentUser;
 
     final Map<String, List<User>> groupedByPosition = {};
+
     for (var user in users) {
       final mainPosition = user.mainPosition.isNotEmpty ? user.mainPosition : 'Unknown';
       if (groupedByPosition.containsKey(mainPosition)) {
@@ -31,31 +48,29 @@ class HomePage extends StatelessWidget {
     }
 
     final now = DateTime.now();
-    final hour = now.hour + 2;
+    final hour = now.hour;
 
     String greeting;
 
     if (hour < 12) {
-      greeting = 'Bonjour, Michael !';
+      greeting = 'Bonjour, ${currentUser?.name ?? "Michael"} !';
     } else if (hour < 18) {
-      greeting = 'Bonjour, Michael!';
+      greeting = 'Bonjour, ${currentUser?.name ?? "Michael"} !';
     } else {
-      greeting = 'Bonsoir, Michael !';
+      greeting = 'Bonsoir, ${currentUser?.name ?? "Michael"} !';
     }
 
     return Scaffold(
-
       appBar: AppBar(
-          title: Image.asset(
-            'assets/images/logo.png',
-            width: 200,
-            fit: BoxFit.cover,
-          ),
-          backgroundColor: primaryColor,
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-
+        title: Image.asset(
+          'assets/images/logo.png',
+          width: 200,
+          fit: BoxFit.cover,
+        ),
+        backgroundColor: primaryColor,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
         actions: [
           IconButton(
             iconSize: 35,
@@ -71,8 +86,9 @@ class HomePage extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-
-      body: Padding(
+      body: usersViewModel.isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +110,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-
             Expanded(
               child: ListView(
                 children: groupedByPosition.keys.map((mainPosition) {
@@ -112,7 +127,6 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-
                         Column(
                           children: groupedByPosition[mainPosition]!.map((user) {
                             return UserCard(user: user);

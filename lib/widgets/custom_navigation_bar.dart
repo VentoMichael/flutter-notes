@@ -11,49 +11,84 @@ class CustomNavigationBar extends StatelessWidget {
     final settingsViewModel = Provider.of<SettingsViewModel>(context);
     final isDarkMode = settingsViewModel.setting.isDarkModeEnabled;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: isDarkMode ? Colors.black.withOpacity(0.3) : Colors.grey.withOpacity(0.3),
-            blurRadius: 10,
-            spreadRadius: 2,
-            offset: Offset(0, -2),
-          )
-        ],
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      child: BottomNavigationBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: primaryColor,
-        unselectedItemColor: Colors.black,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        selectedLabelStyle: TextStyle(
-          fontSize: 12,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: 12,
-        ),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home',
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 70,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: isDarkMode ? Colors.black.withOpacity(0.3) : Colors.grey.withOpacity(0.3),
+                blurRadius: 10,
+                spreadRadius: 2,
+                offset: Offset(0, -2),
+              )
+            ],
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+          child: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: primaryColor,
+            unselectedItemColor: Colors.black,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            selectedLabelStyle: TextStyle(
+              fontSize: 14,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontSize: 14,
+            ),
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_filled, size: 30),
+                label: 'Accueil',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings, size: 30),
+                label: 'Paramètres',
+              ),
+            ],
+            currentIndex: _getSelectedIndex(context),
+            onTap: (index) => _onItemTapped(context, index),
           ),
-        ],
-        currentIndex: _getSelectedIndex(context),
-        onTap: (index) => _onItemTapped(context, index),
-      ),
+        ),
+        Positioned(
+          top: -45,
+          left: MediaQuery.of(context).size.width / 2 - 40,
+          child: SizedBox(
+            width: 80,
+            height: 80,
+            child: FloatingActionButton(
+              onPressed: () {
+
+                Navigator.pushReplacementNamed(context, '/addNote');
+              },
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.note_add_rounded,
+                    size: 40,
+                    color: Colors.white.withOpacity(0.7),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
